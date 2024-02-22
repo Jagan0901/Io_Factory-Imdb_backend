@@ -18,7 +18,7 @@ router.post("/", auth, async (req, res) => {
   res.send(create);
 });
 
-// Movies/id
+//  Movies/id
 router.get("/:movieId", async (req, res) => {
   const { movieId } = req.params;
   const movie = await getMoviesById(movieId);
