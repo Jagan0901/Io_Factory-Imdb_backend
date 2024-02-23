@@ -17,11 +17,11 @@ router.post("/signup", async (req, res) => {
 
   const isUserExist = await getUserByEmail(email);
   if (isUserExist) {
-    res.status(404).send({ message: "Email already exists" });
+    res.status(404).send({ error: "Email already exists" });
     return;
   }
   if (!/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/g.test(password)) {
-    res.status(404).send({ message: "Password pattern does not match" });
+    res.status(404).send({ error: "Password pattern does not match" });
     return;
   }
   const hashedPassword = await genPassword(password);
@@ -34,13 +34,13 @@ router.post("/login", async (req, res) => {
   console.log(email, password);
   const userFromDB = await getUserByEmail(email);
   if (!userFromDB) {
-    res.status(404).send({ message: "Invalid Credentials" });
+    res.status(404).send({ error: "Invalid Credentials" });
     return;
   }
   const storedDbPassword = userFromDB.password;
   const isPasswordMatch = await bcrypt.compare(password, storedDbPassword);
   if (!isPasswordMatch) {
-    res.status(404).send({ message: "Invalid Credentials" });
+    res.status(404).send({ error: "Invalid Credentials" });
     return;
   }
 
