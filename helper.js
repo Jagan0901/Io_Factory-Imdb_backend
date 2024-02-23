@@ -85,16 +85,16 @@ export async function genPassword(password) {
 }
 // console.log(genPassword("password"));
 
-export async function createUser(username, hashedPassword) {
+export async function createUser(email, hashedPassword) {
   return await client
     .db("IoFactory-Imdb")
     .collection("users")
-    .insertOne({ username: username, password: hashedPassword });
+    .insertOne({ email: email, password: hashedPassword });
 }
 
-export async function getUserByName(username) {
+export async function getUserByEmail(email) {
   return await client
     .db("IoFactory-Imdb")
     .collection("users")
-    .findOne({ username: username });
+    .findOne({ email: email });
 }

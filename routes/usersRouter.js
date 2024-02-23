@@ -1,16 +1,23 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { genPassword, createUser, getUserByName } from "../helper.js";
+import { genPassword, createUser, getUserByEmail } from "../helper.js";
 
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
-  console.log(username, password);
-  const isUserExist = await getUserByName(username);
+  const { email, password } = req.body;
+  console.log(email, password);
+
+  //To set Email Pattern
+    if(!/^[\w]{1,}[\w.+-]{0,}@[\w-]{2,}([.][a-zA-Z]{2,}|[.][\w-]{2,}[.][a-zA-Z]{2,})$/g.test(email)){
+        res.status(400).send({error: "Invalid Email Pattern"})
+        return;
+    }
+
+  const isUserExist = await getUserByEmail(email);
   if (isUserExist) {
-    res.status(404).send({ message: "Username already taken" });
+    res.status(404).send({ message: "Email already exists" });
     return;
   }
   if (!/^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/g.test(password)) {
@@ -18,14 +25,14 @@ router.post("/signup", async (req, res) => {
     return;
   }
   const hashedPassword = await genPassword(password);
-  const create = await createUser(username, hashedPassword);
+  const create = await createUser(email, hashedPassword);
   res.send(create);
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  console.log(username, password);
-  const userFromDB = await getUserByName(username);
+  const { email, password } = req.body;
+  console.log(email, password);
+  const userFromDB = await getUserByEmail(email);
   if (!userFromDB) {
     res.status(404).send({ message: "Invalid Credentials" });
     return;
@@ -39,7 +46,7 @@ router.post("/login", async (req, res) => {
 
   const token = jwt.sign({ id: userFromDB._id }, process.env.SECRET_KEY);
 
-  res.send({ message: "Login Successful", token: token });
+  res.send({ message: "Login Successful", token: token, email:userFromDB.email });
 });
 
 export const usersRouter = router;
