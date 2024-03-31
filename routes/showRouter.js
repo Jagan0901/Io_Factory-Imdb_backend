@@ -13,10 +13,10 @@ const router = express.Router();
 //POST method
 router.post("/", auth, async (req, res) => {
   const newShow = req.body;
-  const id = Math.floor(Math.random() * 10000 + 1);
-   newShow.id = id;
+  // const id = Math.floor(Math.random() * 10000 + 1);
+  //  newShow.id = id;
   console.log(newShow);
-  const create = await addShows(newShow);
+  const create = await addShows(newShow); 
   res.send(create);
 });
 
