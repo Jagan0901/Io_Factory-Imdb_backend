@@ -21,7 +21,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 // Movies/id
-router.get("/:showId", auth, async (req, res) => {
+router.get("/:showId",  async (req, res) => {
   const { showId } = req.params;
   const show = await getShowsById(showId);
   // const movie = movies.find((mv) => mv.id == movieId)
@@ -37,7 +37,7 @@ router.delete("/:showId", auth, async (req, res) => {
 });
 
 //Update movie
-router.put("/:showId", auth, async (req, res) => {
+router.put("/:showId", async (req, res) => {
   const { showId } = req.params;
   const updatedShow = req.body;
   // console.log(newMovie);
