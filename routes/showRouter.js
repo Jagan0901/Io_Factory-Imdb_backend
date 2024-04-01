@@ -37,7 +37,7 @@ router.delete("/:showId", auth, async (req, res) => {
 });
 
 //Update movie
-router.put("/:showId", auth, async (req, res) => {
+router.put("/:showId", async (req, res) => {
   const { showId } = req.params;
   const updatedShow = req.body;
   // console.log(newMovie);
